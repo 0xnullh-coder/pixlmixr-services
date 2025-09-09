@@ -81,7 +81,7 @@ fi
 print_status "Deploying Creation Service..."
 cd creation-service
 
-# Build and deploy
+# Build and deploy with explicit platform
 gcloud run deploy creation-service \
     --source . \
     --region ${REGION} \
@@ -93,7 +93,8 @@ gcloud run deploy creation-service \
     --cpu 2 \
     --timeout 60 \
     --concurrency 100 \
-    --max-instances 10
+    --max-instances 10 \
+    --execution-environment gen2
 
 # Get the service URL
 CREATION_SERVICE_URL=$(gcloud run services describe creation-service --region ${REGION} --format 'value(status.url)')

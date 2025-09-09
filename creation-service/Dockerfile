@@ -1,5 +1,8 @@
-# Use the official Node.js 20 image
-FROM node:20-slim
+# Use the official Node.js 20 Alpine image for smaller size
+FROM node:20-alpine
+
+# Install any needed packages
+RUN apk add --no-cache tini
 
 # Create app directory
 WORKDIR /app
@@ -7,8 +10,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --production
+# Install dependencies with clean install for production
+RUN npm ci --only=production && npm cache clean --force
 
 # Copy application code
 COPY . .
@@ -17,11 +20,17 @@ COPY . .
 RUN addgroup -g 1001 nodejs && \
     adduser -S -u 1001 -G nodejs nodejs
 
+# Change ownership of app directory
+RUN chown -R nodejs:nodejs /app
+
 # Switch to the nodejs user
 USER nodejs
 
 # Expose port
 EXPOSE 8080
+
+# Use tini to handle signals properly
+ENTRYPOINT ["/sbin/tini", "--"]
 
 # Start the application
 CMD ["node", "src/index.js"]

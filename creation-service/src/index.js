@@ -5,7 +5,7 @@ import { logger } from 'hono/logger';
 import vision from '@google-cloud/vision';
 import { Storage } from '@google-cloud/storage';
 import aiplatform from '@google-cloud/aiplatform';
-import sharp from 'sharp';
+import Jimp from 'jimp';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -173,16 +173,23 @@ app.post('/create', async (c) => {
       const width = highRes ? 1920 : 1024;
       const height = highRes ? 1080 : 1024;
       
-      generatedImageBuffer = await sharp({
-        create: {
-          width,
-          height,
-          channels: 4,
-          background: { r: 147, g: 51, b: 234, alpha: 1 }
+      // Create a gradient image using Jimp
+      const image = new Jimp(width, height, 0x9333EAFF); // Purple color with full alpha
+      
+      // Add a gradient effect for better visual appeal
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const gradientFactor = (x / width + y / height) / 2;
+          const r = Math.floor(147 + (255 - 147) * gradientFactor);
+          const g = Math.floor(51 + (100 - 51) * gradientFactor);
+          const b = Math.floor(234 - (234 - 180) * gradientFactor);
+          const color = Jimp.rgbaToInt(r, g, b, 255);
+          image.setPixelColor(color, x, y);
         }
-      })
-      .png()
-      .toBuffer();
+      }
+      
+      // Convert to buffer
+      generatedImageBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
     }
     
     // Step 4: Save to Google Cloud Storage
