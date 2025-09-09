@@ -1,4 +1,4 @@
-# Simple, working Dockerfile for Minting Service
+# Simple, working Dockerfile for Creation Service
 FROM node:20-slim
 
 # Create app directory
@@ -14,7 +14,7 @@ RUN npm install --production
 COPY . .
 
 # Expose port
-EXPOSE 8081
+EXPOSE 8080
 
 # Start the application
 CMD ["node", "src/index.js"]
