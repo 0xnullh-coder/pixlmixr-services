@@ -46,11 +46,12 @@ cd pixlmixr-services
 
 # Configure Google Cloud
 gcloud auth login
-gcloud config set project YOUR_PROJECT_ID
+gcloud config set project pixlmixr-prod
 
 # Deploy both services
-chmod +x deploy.sh
 ./deploy.sh
+# Or use the simple deployment:
+./deploy-simple.sh
 ```
 
 ### Manual Deployment

@@ -128,7 +128,7 @@ app.post('/create', async (c) => {
     
     try {
       // Try Google Imagen API
-      const projectId = process.env.GOOGLE_CLOUD_PROJECT || 'pixlmixr';
+      const projectId = process.env.GOOGLE_CLOUD_PROJECT || 'pixlmixr-prod';
       const location = 'us-central1';
       const publisher = 'google';
       const model = 'imagen-3.0-generate-001';

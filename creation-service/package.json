@@ -9,7 +9,7 @@
     "dev": "node --watch src/index.js",
     "test": "node test-jimp.js",
     "build": "echo 'No build step required'",
-    "deploy": "gcloud run deploy creation-service --source . --region us-central1 --allow-unauthenticated"
+    "deploy": "gcloud run deploy creation-service --source . --region us-central1 --allow-unauthenticated --project pixlmixr-prod"
   },
   "dependencies": {
     "@google-cloud/aiplatform": "^3.0.0",
