@@ -10,9 +10,16 @@ echo "=========================================="
 PROJECT_ID=$(gcloud config get-value project)
 REGION="us-central1"
 
+# Check if we need to switch to pixlmixr-prod
+if [ "$PROJECT_ID" != "pixlmixr-prod" ]; then
+    echo "⚠️  Current project is '$PROJECT_ID', switching to pixlmixr-prod..."
+    gcloud config set project pixlmixr-prod
+    PROJECT_ID="pixlmixr-prod"
+fi
+
 if [ -z "$PROJECT_ID" ]; then
     echo "❌ No Google Cloud project configured!"
-    echo "Please run: gcloud config set project YOUR_PROJECT_ID"
+    echo "Please run: gcloud config set project pixlmixr-prod"
     exit 1
 fi
 
