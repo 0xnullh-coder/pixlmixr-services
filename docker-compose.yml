@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  creation-service:
+    build: ./creation-service
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - GOOGLE_CLOUD_PROJECT=pixlmixr
+      - GCS_BUCKET_NAME=pixlmixr-images
+      - CLOUDFLARE_D1_API_URL=http://localhost:3000/api/internal
+    volumes:
+      - ./creation-service/src:/app/src
+      - ./service-account.json:/app/service-account.json
+    env_file:
+      - ./creation-service/.env
+    networks:
+      - pixlmixr-network
+
+  minting-service:
+    build: ./minting-service
+    ports:
+      - "8081:8081"
+    environment:
+      - NODE_ENV=development
+      - PORT=8081
+      - GOOGLE_CLOUD_PROJECT=pixlmixr
+      - GCS_BUCKET_NAME=pixlmixr-images
+      - CLOUDFLARE_D1_API_URL=http://localhost:3000/api/internal
+    volumes:
+      - ./minting-service/src:/app/src
+    env_file:
+      - ./minting-service/.env
+    networks:
+      - pixlmixr-network
+
+networks:
+  pixlmixr-network:
+    driver: bridge

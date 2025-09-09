@@ -1,0 +1,27 @@
+{
+  "name": "pixlmixr-creation-service",
+  "version": "1.0.0",
+  "description": "PIXLMIXR Creation Service - Handles AI generation and storage",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "build": "echo 'No build step required'",
+    "deploy": "gcloud run deploy creation-service --source . --region us-central1 --allow-unauthenticated"
+  },
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.3.0",
+    "@google-cloud/vision": "^4.0.0",
+    "@google-cloud/storage": "^7.0.0",
+    "@google-cloud/aiplatform": "^3.0.0",
+    "axios": "^1.6.0",
+    "sharp": "^0.33.0",
+    "uuid": "^9.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
