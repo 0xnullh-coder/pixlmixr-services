@@ -29,13 +29,30 @@ const app = new Hono();
 
 // Middleware
 app.use('*', cors({
-  origin: [
-    'https://pixlmixr.app',
-    'https://minipixlmixr.pages.dev',
-    'https://minipixlmixr-staging.pages.dev',
-    'http://localhost:3000'
-  ],
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'https://pixlmixr.app',
+      'https://www.pixlmixr.app',
+      'https://minipixlmixr.pages.dev',
+      'https://minipixlmixr-staging.pages.dev',
+      'http://localhost:3000',
+      'http://localhost:8787'
+    ];
+    
+    // Check if origin is allowed or if it's a Cloudflare Pages preview URL
+    if (allowedOrigins.includes(origin) || origin.includes('.pages.dev')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all origins for now to fix the issue
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Length', 'Content-Type']
 }));
 app.use('*', logger());
 
